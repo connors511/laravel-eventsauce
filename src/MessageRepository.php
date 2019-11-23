@@ -42,6 +42,7 @@ class MessageRepository implements EventSauceMessageRepository
                     'event_id' => $serializeMessage['headers'][Header::EVENT_ID] ?? Uuid::uuid4()->toString(),
                     'event_type' => $serializeMessage['headers'][Header::EVENT_TYPE],
                     'aggregate_root_id' => $serializeMessage['headers'][Header::AGGREGATE_ROOT_ID] ?? null,
+                    'aggregate_root_version' => $serializeMessage['headers'][Header::AGGREGATE_ROOT_VERSION] ?? 1,
                     'payload' => json_encode($serializeMessage),
                     'recorded_at' => $serializeMessage['headers'][Header::TIME_OF_RECORDING],
                 ]);
