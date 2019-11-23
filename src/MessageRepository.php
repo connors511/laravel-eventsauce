@@ -61,4 +61,19 @@ class MessageRepository implements EventSauceMessageRepository
             yield from $this->serializer->unserializePayload(json_decode($payload->payload, true));
         }
     }
+
+    public function retrieveAllAfterVersion(AggregateRootId $id, int $aggregateRootVersion): Generator
+    {
+        $payloads = $this->connection
+            ->table($this->tableName)
+            ->select('payload')
+            ->where('aggregate_root_id', $id->toString())
+            ->where('aggregate_root_version', '>', $aggregateRootVersion)
+            ->orderBy('recorded_at')
+            ->get();
+
+        foreach ($payloads as $payload) {
+            yield from $this->serializer->unserializePayload(json_decode($payload->payload, true));
+        }
+    }
 }
